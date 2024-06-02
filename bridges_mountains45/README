@@ -1,0 +1,68 @@
+=================================================
+ __  __  ___  _   _ _   _ _____  _    ___ _   _ 
+|  \/  |/ _ \| | | | \ | |_   _|/ \  |_ _| \ | |
+| |\/| | | | | | | |  \| | | | / _ \  | ||  \| |
+| |  | | |_| | |_| | |\  | | |/ ___ \ | || |\  |
+|_|  |_|\___/ \___/|_| \_| |_/_/   \_\___|_| \_|
+                                                
+ ____  ____  ___ ____   ____ _____ ____  
+| __ )|  _ \|_ _|  _ \ / ___| ____/ ___| 
+|  _ \| |_) || || | | | |  _|  _| \___ \ 
+| |_) |  _ < | || |_| | |_| | |___ ___) |
+|____/|_| \_\___|____/ \____|_____|____/ 
+                                         
+=================================================
+
+For this assignment, you will use the BRIDGES library to visualize pathfinding
+your way through the mountains of Colorado. BRIDGES is a neat library, written
+by UNCC, that helps new programmers out by allowing them to visually see
+the results of their work. 
+
+Make sure you sign up on the BRIDGES web site here: https://bridgesuncc.github.io/
+Put in your username and apikey from the website into the code at the top of main().
+
+Purpose: To learn about row-major ordering by accessing a 2D array from
+assembly, and to function as an independent author of assembly code. You will
+find a functioning findPath function in C++. You must delete it (or comment it
+out) and rewrite it in assembly. You should be comfortable enough by now with
+ARM32 assembly to make a Makefile, to use extern "C" to declare the assembly
+function, and link them together.
+
+You can leave the rest of the code in C++, and you can write any sort of
+reasonable helper functions in C or C++, just make sure that your main logic
+is all in assembly.
+
+Leave most of the program in C++, just only rewrite findPath. The existing
+code will load from the file, transmit the data to BRIDGES, and so forth.
+
+What does your findPath code do?
+
+Given a starting row you will start on the left side of the
+map (column 0) and walk one column at a time to the right side of the map, using
+the following greedy algorithm (this won't be an optimal shortest path, but is
+easy to code):
+1) Get the elevation of the map (held in a 2D array) at the current spot.
+2) Of the three squares to the east (northeast, east, southeast) move to the
+one closest in elevation. 
+3) Mark square you move to with -1 elevation. The rendering code uses this to
+draw the pink line on the map
+4) Repeat until you hit the right side of the map. Make sure you don't go off
+the edges of the map. (For example. if you're on the top row, only consider
+two points: to the east and southeast.)
+
+Grades (each bullet point you complete is a grade):
+You must submit shots of your code (and give me a URL for the BRIDGES
+projects) for the following four runs:
+1) The result of your code (assembly implementation) running on the San Joaquin map starting on row 100, as visualized on the BRIDGES website.
+2) The result of your code running on the Colorado2 (not Colorado1!) map starting at row 400, as visualized on the BRIDGES website.
+3) The result of your code on the Korea map, row 300
+4) The result of your code on the Tahoe map, row 0
+5) Add false color to the map, so that it looks nice, instead of just
+greyscale.
+
+Credit:
+This assignment is a modded version of the Mountain Paths Nifty Assignment here:
+http://nifty.stanford.edu/2016/franke-mountain-paths/
+
+The starting source code is from the BRIDGES team at UNCC:
+http://bridgesuncc.github.io/
