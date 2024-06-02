@@ -1,0 +1,21 @@
+For this assignment, you will redo the darken function, implemented in C in main.cc, in assembly.
+
+Inside the file student_darken.s, you must write an assembly function that will do the same thing as the darken function. If you do this successfully, you will get a C on the assignment. (That's not a typo - correctness on this assignment is only worth a C.)
+
+You will need to beat target running times to get a higher grade on the assignment:
+time <= 6 seconds (time for a library call that does this): a C+ (78%)
+time <= 3 seconds: a B- (80%)
+time <= 2 seconds: a B (85%)
+time <= 1 second (C++ run time without optimizations): a B+ (88%) 
+time <= .22 seconds (C++ run time with -O1 enabled): an A- (90%)
+time <= .11 seconds (The usual run time for a simple hand-coded assembly routine): an A (95%)
+time <= .06 seconds (C++ run time with vectorization optimizations turned on takes ~0.04s): an A+ (100%)
+time <= .03 seconds (Well-written hand-coded assembly): an A++ (110%)
+
+These times are from the self-reported measurements of CPU Time, not Wall Clock time (which is usually 3x to 10x longer). Don't mess with the time reporting code or you'll lose all points.
+
+Reference file: This will be using /public/kyoto.jpg as the reference file. It's a 4K image, or close to it.
+
+If you don't think these times matter, consider the difference between a program that takes 0.05s to process a frame and one that can do it in 0.03s - the first can do only 20 frames per second, which is not fast enough to process video. But the second one can run at a smooth 33fps. And this is 33fps of *processing 4K video on a Raspberry Pi.*
+
+Assembly is awesome.
