@@ -1,0 +1,106 @@
+=====================================================
+ _____ ___ ____  ____ _____   ____   ___  ____ _____ 
+|  ___|_ _|  _ \/ ___|_   _| |  _ \ / _ \/ ___|_   _|
+| |_   | || |_) \___ \ | |   | |_) | | | \___ \ | |  
+|  _|  | ||  _ < ___) || |   |  __/| |_| |___) || |  
+|_|   |___|_| \_\____/ |_|   |_|    \___/|____/ |_|  
+                                                     
+=====================================================
+
+Purpose: This assignment will teach you how to do variables and algebra in
+ARM32 assembly (ASM for short).
+
+Directions: Open up the three .s files in turn, and write assembly code in the
+places marked "Your code here" that matches the sample C++ code.
+
+Build: Type "make" to compile your project, then "a.out" to run.
+
+Test: Write one function at a time and test it manually. Once you think you're
+ready to go, run "input_tester" and see how many test cases you pass. If you
+passed all of them, you're done! If you fail some, then the number of points
+you get on the assignment is the number of tests you pass.
+
+Optimize: Once you get your code done, try to refactor your code to cut down
+on the total cost of the code. Every normal command (ADD, SUB, MOV) costs one
+stroke. Every multiply (MUL) costs four strokes. Every function call costs 40
+strokes. The boilerplate (the label and return command) aren't counted in your
+stroke count. Run input_tester again. If you still pass, then good job!
+Message me your stroke count. 
+
+The top 25% of students will get +25% to their grade on this assignment.
+
+Message me on Discord if you have any questions, or post in the #csci-45 help
+center on Discord.
+
+RESTRICTIONS: Don't use the compiler to generate optimized assembly for you.
+That is cheating. Also, don't modify the C++ code at all, or you will get a 0.
+
+Sample Runs:
+Please input a value for x:
+8
+Please input a value for y:
+4
+Please input a value for z:
+2
+Please input a value for w:
+8
+Please choose which function you want to call:
+1) foo (4*x)
+2) bar (xy-y^2)
+3) baz (5x+5xy+5xyz)
+4) quz (x-y)*(z+w) - (x-y)*(-1*z + -1*w)
+(Anything else) Quit
+1
+32
+
+Please input a value for x:
+7
+Please input a value for y:
+1
+Please input a value for z:
+-9
+Please input a value for w:
+6
+Please choose which function you want to call:
+1) foo (4*x)
+2) bar (xy-y^2)
+3) baz (5x+5xy+5xyz)
+4) quz (x-y)*(z+w) - (x-y)*(-1*z + -1*w)
+(Anything else) Quit
+2
+6
+
+Please input a value for x:
+100
+Please input a value for y:
+200
+Please input a value for z:
+-200
+Please input a value for w:
+3
+Please choose which function you want to call:
+1) foo (4*x)
+2) bar (xy-y^2)
+3) baz (5x+5xy+5xyz)
+4) quz (x-y)*(z+w) - (x-y)*(-1*z + -1*w)
+(Anything else) Quit
+3
+-19899500
+
+Please input a value for x:
+5
+Please input a value for y:
+3
+Please input a value for z:
+4
+Please input a value for w:
+9
+Please choose which function you want to call:
+1) foo (4*x)
+2) bar (xy-y^2)
+3) baz (5x+5xy+5xyz)
+4) quz (x-y)*(z+w) - (x-y)*(-1*z + -1*w)
+(Anything else) Quit
+4
+52
+
