@@ -1,0 +1,56 @@
+=======================================================
+ ____  ____   ___  _   _  ____ _____ ____   ___  ____  
+/ ___||  _ \ / _ \| \ | |/ ___| ____| __ ) / _ \| __ ) 
+\___ \| |_) | | | |  \| | |  _|  _| |  _ \| | | |  _ \ 
+ ___) |  __/| |_| | |\  | |_| | |___| |_) | |_| | |_) |
+|____/|_|    \___/|_| \_|\____|_____|____/ \___/|____/ 
+                                                       
+=======================================================
+
+Purpose: To learn about how arrays work, and byte-addressed memory.
+
+Learning point: If you have a pointer to a string held in R7, and you want to
+access the Nth element of it (say R8 holds N), you do this:
+LDRB R6, [R7,R8]
+
+This will load one byte of memory (a char) into R6. You can do whatever you
+like with it, and then if you want to write it back to the same address you do
+this:
+STRB R6, [R7,R8]
+
+NOTE THIS BREAKS THE STANDARD CONVENTION IN ARM32 - the source register is on
+the left hand side!!!11!1!!!
+
+For this assignment, you will implement a spongebob meme text converter.
+Essentially you will flip a coin (rand() % 2) and use that to uppercase or
+lowercase a letter.
+
+For example, if your program is given this as the input:
+I like eating potatoes!1!
+
+It will modify (as if by a call by reference function) the string to be
+something like this:
+i lIkE EaTiNg pOtAtOeS!1!
+
+The random coin flips will be given to you by rand(), if the result is divisible by 2,
+uppercaseify it, if not, lowercaseify it. Note that only letters change. If
+they're not alphas (A-Z and a-z) then leave them alone. You can use isalpha()
+and other functions in cctype if you like.
+
+You will be graded on correctness. The top 25% of students run times will get
++25% to their grade for this assignment. The timing will be for inputfile9,
+which is the complete works of Shakespeare.
+
+NOTE: Don't mess with main() or main.cc at all, especially not the timing code.
+
+NOTE: I did not provide a Makefile for this assignment, or even the asm_spongebob.s
+file - it will be good practice for you to make them.
+
+NOTE: C-style strings are arrays of characters, that end with a null byte (the
+character is equal to 0), so you won't know in advance how many characters are
+in the string. (Which is why C++ strings are better.) 
+
+NOTE: You are welcome to write helper functions in a separate main.cc file for
+doing things like printing out the values of variables to help you debug -
+just remember you have to actually do the assignment in assembly. Don't just
+have your assembly code call C++ code to solve it for you.
