@@ -1,0 +1,69 @@
+===========================================================
+  ____ ___  ____  _____   _____ _____ _   _ _   _ ___ ____  
+ / ___/ _ \|  _ \| ____| |_   _| ____| \ | | \ | |_ _/ ___| 
+| |  | | | | | | |  _|     | | |  _| |  \| |  \| || |\___ \ 
+| |__| |_| | |_| | |___    | | | |___| |\  | |\  || | ___) |
+ \____\___/|____/|_____|   |_| |_____|_| \_|_| \_|___|____/ 
+                                                            
+===========================================================
+
+For this assignment you will be partnered with someone doing the other half of
+the assignment. You MUST NOT share source code!!! What your source code does
+must be a mystery to the other person. Each of you will make an archive
+holding your half of the code, and the other person will link it against their
+code to make a final executable.
+
+Person A will work entirely in C++, and will make a couple arrays, fill them
+with secret and interesting data, and then build team.cc into an archive
+(static library) file and pass it to Person B using GitHub.
+
+Person B will download Person A's library using GitHub and will link it
+against their assembly code. Their assembly code must modify the arrays in
+interesting AND SECRET (don't tell them) ways. They will compile their half
+into an archive (static library) as well, and upload their half on GitHub as
+well. Person B can build helper functions to print out ints if they want.
+
+Person A will download Person B's archive, and link it against their code, and
+write a short essay on Canvas about what their partner did to their beautiful
+array, and say what data they passed to Person B.
+
+Person B will write a short essay saying what they did to Person A's
+array, and guess what Person A's array was originally.
+
+GitHub summary:
+1) Step one - go to GitHub.com, create an account if you don't have one.
+Create a new repository called anything (but not code_tennis!!), add a license
+(GPL probably) and a Readme.md with which you should mention this is a
+homework assignment and for everyone to pay it no attention. (And you should
+delete it after the assignment is done.)
+
+2) Click on the green button to get the http link for your repository (which
+we call a "Repo"). Send it to your partner over Discord or whatever.
+
+3) Go into PuTTY and type "git clone <the URL>"
+
+4) cd into the directory just made, and work on your assignment there. Or work
+on it in code_tennis and then copy over the .a files later into here.
+
+5) When your code is ready, make an archive of your .o file via "ar rcs
+teama.a teama.o" (or teamb if you are person B)
+
+6) Type "git add teama.a" to indicate it is ready to be uploaded to GitHub
+
+7) Type "git commit" to stage all changes for transfer (these can be combined
+if needed, but w/e). Type in a description of the change you made if you want
+
+8) Type "git push" and this will upload it to GitHub. You will need to enter
+your credentials.
+
+THE OTHER PARTNER NOW
+
+1) git clone <the URL your partner sent>
+
+2) copy the .a file into your homework directory
+
+3) link it against your code
+
+4) ??
+
+5) Profit
