@@ -1,10 +1,14 @@
-# ARM32 Systems Lab
+![ARM32 Systems Lab. Image filters, terrain traversal, and a small BASIC-to-assembly compiler.](docs/branding/overview.svg)
 
-**Brandon Vaquilar · Computer Organization and Assembly Language Programming**
+**ARM assembly coursework by Brandon Vaquilar, with portable builds and verified output.**
+
+[Output previews](#output-previews) · [Build instructions](#build-and-run) · [Portfolio](https://brandonvaquilar.com)
 
 A collection of ARM32 coursework exploring arithmetic, control flow, image processing, terrain traversal, and a small BASIC-to-assembly compiler. C and C++ drivers call hand-written ARM routines through the C ABI.
 
-**Start with the results below. No installation is needed to view the images or [console transcript](docs/assets/console-output.txt).** A responsive [gallery page](docs/index.html) is also included for static hosting.
+## Output previews
+
+No installation is needed to view the images or [console transcript](docs/assets/console-output.txt). A responsive [gallery page](docs/index.html) is also included for static hosting.
 
 ![Original image alongside darken, sepia and custom warm filters produced by ARM32 assembly](docs/assets/filters-comparison.webp)
 
@@ -36,9 +40,9 @@ The compiler translates line-numbered BASIC into ARM32 assembly. The example abo
 
 The original coursework folders and contributor comments are preserved. The current build adds portable drivers, regression checks, corrected FizzBuzz and terrain logic, compiler fixes, and reproducible visual previews. These maintenance changes should be distinguished from the original coursework when describing the project.
 
-## Build on Ubuntu or Debian Linux
+## Build and run
 
-These instructions target an x86 Linux host. On Windows, use an Ubuntu WSL environment.
+These instructions target an x86 Ubuntu or Debian Linux host. On Windows, use an Ubuntu WSL environment.
 
 ```bash
 sudo apt update

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="title desc">
+  <title id="title">ARM32 Systems Lab</title>
+  <desc id="desc">Image filters, terrain traversal, and a small BASIC-to-assembly compiler.</desc>
+  <rect width="1280" height="360" rx="20" fill="#f6f5f0"/>
+  <rect x="0.75" y="0.75" width="1278.5" height="358.5" rx="20" fill="none" stroke="#ddddd3" stroke-width="1.5"/>
+  <path d="M56 91H1224" stroke="#ddddd3" stroke-width="1.5"/>
+  <g font-family="DejaVu Sans, Arial, sans-serif">
+    <text x="56" y="58" fill="#4069c8" font-size="18" font-weight="700" letter-spacing="3">BRANDON VAQUILAR</text>
+    <text x="1224" y="58" text-anchor="end" fill="#686a60" font-size="18">ARM ASSEMBLY + C / C++</text>
+    <text fill="#24251f" font-size="68" font-weight="700" letter-spacing="-2"><tspan x="56" y="164">ARM32</tspan><tspan x="56" y="240">Systems Lab</tspan></text>
+    <text x="56" y="316" fill="#686a60" font-size="23">Image filters, terrain traversal, and a small BASIC-to-assembly compiler.</text>
+  </g>
+  <g transform="translate(1050 94) scale(2.6)" fill="none" stroke="#4069c8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="7" y="7" width="42" height="42" rx="9" fill="#e5edf9" stroke-width="4"/>
+      <path d="M55 21v26a9 9 0 0 1-9 9H21" stroke-width="4"/>
+      <path d="m24 21-7 7 7 7m8-14 7 7-7 7" stroke-width="3.5"/>
+    </g>
+</svg>
