@@ -1,0 +1,12 @@
+/build/
+*.o
+*.out
+core
+core.*
+__pycache__/
+*.pyc
+.env
+.env.*
+/asm_compiler/main.s
+/asm_image/output.*
+/code_tennis/output.*

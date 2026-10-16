@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "Bridges.h"
 #include "ColorGrid.h"
 #include <iostream>
@@ -16,8 +17,14 @@ extern "C" { void asm_findpath(int *img_arr, int imgWidth, int imgHeight, int st
 
 int main(int argc, char **argv) {
 	int bridges_project_id = 302; //901;
-    string bridges_username = "BrandonV";
-    string bridges_api_key  = "880903452940";
+	const char* username = std::getenv("BRIDGES_USERNAME");
+	string bridges_username = username ? username : "";
+	if (bridges_api_key.empty() || bridges_username.empty()) {
+		cerr << "Set BRIDGES_API_KEY and BRIDGES_USERNAME, or use the offline terrain preview.\n";
+		return 1;
+	}
+	const char* key = std::getenv("BRIDGES_API_KEY");
+	string bridges_api_key = key ? key : "";
 	//static_assert(false,"Please enter your username and apikey above, and then delete this line.");
 
 	// bridges object initialization
