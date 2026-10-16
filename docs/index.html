@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Brandon Vaquilar's ARM32 coursework: image filters, terrain traversal and a small BASIC compiler, shown through actual program outputs.">
+  <meta name="color-scheme" content="light dark">
+  <title>ARM32 Systems Lab · Brandon Vaquilar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="brand" href="#top" aria-label="ARM32 Systems Lab home"><span class="mark" aria-hidden="true">32</span> Brandon Vaquilar</a>
+    <nav aria-label="Primary navigation"><a href="#results">Results</a><a href="#approach">Approach</a><a href="https://github.com/BrandonVaquilar/Computer-Organization-and-Assembly-Language-Programming" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main id="top">
+    <section class="hero wrap" aria-labelledby="title">
+      <div class="eyebrow"><span class="dot" aria-hidden="true"></span> Coursework / systems programming</div>
+      <h1 id="title">Small programs.<br><span>Closer to the machine.</span></h1>
+      <p class="lead">A look inside my ARM32 coursework, from transforming pixels to compiling a tiny language. Explore the results without installing a toolchain.</p>
+      <div class="hero-links"><a class="button" href="#results">Explore the output <span aria-hidden="true">↓</span></a><a class="text-link" href="https://github.com/BrandonVaquilar/Computer-Organization-and-Assembly-Language-Programming" target="_blank" rel="noopener noreferrer">Browse the repository ↗</a></div>
+      <div class="tags" aria-label="Technologies"><span>ARM32 assembly</span><span>C / C++</span><span>GNU toolchain</span><span>QEMU</span></div>
+    </section>
+
+    <section id="results" class="wrap section" aria-labelledby="results-title">
+      <div class="section-heading"><div><p class="eyebrow">01 / Selected output</p><h2 id="results-title">Instructions made visible.</h2></div><p>These images come from compiled ARM programs. Each example connects a low-level routine to something you can see.</p></div>
+      <article class="project filters">
+        <div class="project-copy"><span class="number">01</span><div><h3>One image. Three transformations.</h3><p>Planar RGB buffers move through assembly routines for darkening, sepia, and a custom warm color matrix. Integer arithmetic produces every transformed pixel.</p></div><span class="badge">Image processing</span></div>
+        <div class="filter-grid">
+          <figure><a href="assets/original.webp" target="_blank" rel="noopener noreferrer" aria-label="Open original image in a new tab"><img src="assets/original.webp" alt="Unprocessed input image of a lantern-lit street" width="960" height="540"></a><figcaption><strong>Original</strong><span>Bundled input image</span></figcaption></figure>
+          <figure><a href="assets/darken.webp" target="_blank" rel="noopener noreferrer" aria-label="Open darkened output in a new tab"><img src="assets/darken.webp" alt="The same image darkened by halving RGB channel values" width="960" height="540" loading="lazy"></a><figcaption><strong>Darken</strong><span>Bit shift / divide by two</span></figcaption></figure>
+          <figure><a href="assets/sepia.webp" target="_blank" rel="noopener noreferrer" aria-label="Open sepia output in a new tab"><img src="assets/sepia.webp" alt="ARM-generated sepia version of the street image" width="960" height="540" loading="lazy"></a><figcaption><strong>Sepia</strong><span>Fixed-point color matrix</span></figcaption></figure>
+          <figure><a href="assets/warm.webp" target="_blank" rel="noopener noreferrer" aria-label="Open warm output in a new tab"><img src="assets/warm.webp" alt="ARM-generated custom warm filter with saturated color channels" width="960" height="540" loading="lazy"></a><figcaption><strong>Custom warm</strong><span>Channel mixing / clamping</span></figcaption></figure>
+        </div>
+        <p class="project-note">The image is an existing coursework asset. Previews are resized for the web; processing runs in ARM assembly.</p>
+      </article>
+
+      <div class="bento">
+        <article class="project terrain"><div class="project-copy"><span class="number">02</span><div><h3>A route through the terrain.</h3><p>Each step chooses the smallest elevation change in the next column. The cyan cells show the greedy route selected in assembly.</p></div></div><figure class="terrain-figure"><a href="assets/san_joaquin.webp" target="_blank" rel="noopener noreferrer" aria-label="Open the terrain output in a new tab"><img src="assets/san_joaquin.webp" alt="San Joaquin elevation dataset with the ARM-selected route marked in cyan" width="632" height="736" loading="lazy"></a><figcaption>San Joaquin dataset · locally greedy route</figcaption></figure><p class="project-note">Boundary checks prevent stepping outside the grid. Equal changes prefer east, then northeast, then southeast. The route is not guaranteed to be globally optimal.</p></article>
+        <article class="concept"><p class="eyebrow">At the boundary</p><h3>Assembly meets<br>the rest of the program.</h3><p>C++ handles files and display. ARM routines work on buffers, preserve registers, and return their results through a shared calling convention.</p><div class="concept-code" aria-label="Example C interface"><code>extern "C"<br>void ssepia(<br>&nbsp; unsigned char* in,<br>&nbsp; unsigned char* out,<br>&nbsp; int width, int height<br>);</code></div></article>
+        <article class="verification"><p class="eyebrow">Checked against references</p><strong>4,000</strong><p>signed arithmetic comparisons</p><div class="check-row"><span>36 filter cases</span><span>384 terrain routes</span></div><a class="text-link" href="assets/console-output.txt" target="_blank" rel="noopener noreferrer">Read the console output ↗</a></article>
+      </div>
+
+      <article class="project compiler"><div class="project-copy"><span class="number">03</span><div><h3>A tiny language, compiled.</h3><p>Line-numbered BASIC becomes ARM32 instructions. This countdown is assembled with GNU tools and runs under QEMU.</p></div><span class="badge">Compiler exercise</span></div><a href="assets/compiler-output.webp" target="_blank" rel="noopener noreferrer" aria-label="Open BASIC source and ARM output in a new tab"><img class="compiler-image" src="assets/compiler-output.webp" alt="BASIC countdown program beside its actual ARM32 console output counting from five to one" width="1440" height="760" loading="lazy"></a><p class="project-note">A teaching subset with integer variables, simple arithmetic, branches, input and output. Short programs are the intended scope.</p></article>
+    </section>
+
+    <section id="approach" class="wrap approach section" aria-labelledby="approach-title"><div><p class="eyebrow">02 / Behind the output</p><h2 id="approach-title">Readable source.<br>Reproducible results.</h2></div><div><p>This collection preserves the original coursework and contributor notes. The maintained build adds portable drivers, regression checks and corrected routines so the examples can be inspected and rerun.</p><p>The unfinished NEON filter experiment and Code Tennis routine remain labeled as incomplete. They are excluded from the maintained build.</p><div class="approach-links"><a class="button" href="https://github.com/BrandonVaquilar/Computer-Organization-and-Assembly-Language-Programming#build-on-ubuntu-or-debian-linux" target="_blank" rel="noopener noreferrer">Build instructions ↗</a><a class="text-link" href="assets/provenance.json" target="_blank" rel="noopener noreferrer">Output provenance ↗</a></div></div></section>
+  </main>
+  <footer class="wrap"><p>Brandon Vaquilar · ARM32 Systems Lab</p><a href="#top">Back to top ↑</a></footer>
+</body>
+</html>

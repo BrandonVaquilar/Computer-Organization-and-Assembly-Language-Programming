@@ -6,6 +6,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <vector>
+#include <cctype>
 using namespace std;
 
 int line_no = 0;
@@ -25,21 +26,22 @@ string read_reg(string reg) {
 	else if (reg == "Y" ) return ("R10");
 	else if (reg == "Z" ) return ("R11");
 	else die(line_no);
-	return reg; 
+	return reg;
 }
 
 int main(int argc, char **argv) {
-	vector<string> vec_str = {}; 
-	//If we pass any parameters, we'll just generate an assembly file 
-	//Otherwise we will generate an assembly file, assemble it, and run it
-	bool assemble_only = false;
-	if (argc > 1) assemble_only = true;
-	ofstream outs("main.s"); //This is the assembly file we're creating
+	vector<string> vec_str = {};
+	// Emit only: assembly and execution are separate, explicit build steps.
+	if (argc > 2) {
+		cerr << "Usage: bb8 [output.s] < program.bas\n";
+		return 1;
+	}
+	ofstream outs(argc == 2 ? argv[1] : "main.s");
 	if (!outs) {
 		cout << "Error opening file.\n";
 		return -1;
 	}
-	outs << ".global main\nmain:\n"; //Get the file ready to rock
+	outs << ".syntax unified\n.arm\n.text\n.global main\nmain:\n";
 	outs << "\tPUSH {LR}\n\tPUSH {R4-R12}\n\n";
 
 	//Initialize all variables to 0
@@ -53,9 +55,15 @@ int main(int argc, char **argv) {
 		getline(cin,s);
 		line_no++;
 		if (!cin) break;
-		transform(s.begin(), s.end(), s.begin(), ::toupper); //Uppercaseify
-		auto it = s.find("QUIT"); //TERMINATE COMPILER
-		if (it != string::npos) break;
+		// Normalize keywords without changing quoted text or escape sequences.
+		bool quoted = false, escaped = false;
+		for (char& ch : s) {
+			if (ch == '"' && !escaped) quoted = !quoted;
+			if (!quoted) ch = static_cast<char>(toupper(static_cast<unsigned char>(ch)));
+			escaped = ch == '\\' && !escaped;
+		}
+		if (s.find_first_not_of(" \t\r") == string::npos) continue;
+		if (s == "QUIT") break;
 		stringstream ss(s); //Turn s into a stringstream
 		int label;
 		ss >> label;
@@ -79,18 +87,19 @@ int main(int argc, char **argv) {
 			outs << "\tBAL quit\n";
 			continue;
 		}
-		else if (command == "IF") { //YOINK CODE FROM KERNEY 
+		else if (command == "IF") { //YOINK CODE FROM KERNEY
 			string v1,oper,v2,then,_goto,line,_else; //X < Y THEN GOTO 100
-			int line1 = -1, line2 = -1; 
+			int line1 = -1, line2 = -1;
 			ss >> v1 >>  oper >> v2 >> then >> _goto >> line; //ss in this order
-			if (!ss) die(line_no);		
+			if (!ss) die(line_no);
 			if (then != "THEN") die(line_no); //vet inputs
 			if (_goto != "GOTO") die(line_no);
 			try {line1 = stoi(line);} catch (...) {die(line_no); } //Convert to interger formats
-			bool has_else = true;
-			ss >> _else >> _goto >> line;
-			try { line2 = stoi(line); } catch (...) {die(line_no); }
-			if (!ss) has_else = false;
+			bool has_else = static_cast<bool>(ss >> _else);
+			if (has_else) {
+				if (_else != "ELSE" || !(ss >> _goto >> line) || _goto != "GOTO") die(line_no);
+				try { line2 = stoi(line); } catch (...) {die(line_no); }
+			}
 			v1 = read_reg(v1);	//Convert registers "X" to "R9"
 			v2 = read_reg(v2);	//Convert again
 			//now turn it into assembly
@@ -129,51 +138,27 @@ int main(int argc, char **argv) {
 				else die(line_no);
 			}
 			else if (has_oper == false) {
-				outs << "\tMOV " << v1 << ", #" << int_v2 << endl;
+				outs << "\tLDR " << v1 << ", =" << int_v2 << endl;
 			}
 			else die(line_no);
 
 		}
-		else if (command == "PRINT") {	
-			string string, temp, temp2, dupe, var;
-			bool is_first = true;
-			bool is_variable = false;
-			while (ss) {
-				dupe = temp2;
-				ss >> temp2;
-				if (temp2 == dupe) break;
-				if (is_first) {
-					if (temp2.front() != '"') {
-						is_variable = true;
-						break;
-					}
-					string = string + temp2;
-					is_first = false;
-					continue;
-				}
-				string = string + " " + temp2;
-			}
+		else if (command == "PRINT") {
+            string value;
+            getline(ss >> ws, value);
+            const auto end = value.find_last_not_of(" \t\r");
+            if (end == string::npos) die(line_no);
+            value.erase(end + 1);
+            if (value.front() == '"') {
+                if (value.size() < 2 || value.back() != '"') die(line_no);
+                vec_str.push_back(value);
+                ++num_str;
+                outs << "\tLDR R0,=string_" << num_str << "\n\tBL print_string\n";
+            } else {
+                outs << "\tMOV R0, " << read_reg(value) << "\n\tBL print_number\n";
+            }
+        }
 
-			if (is_variable) {
-				var = read_reg(temp2);
-				outs << "\tMOV R0, " << var << endl << "\tBL print_number" << endl;
-			}
-			else {
-				for (int i = 0; i < string.size(); i++) {
-					if (string.at(i) == 'N' and string.at(i-1) == '\'') string.at(i) = tolower(string.at(i));
-					temp = temp + string.at(i);
-
-				}
-				string = temp;
-				if (string.at(0) != '"' or string.back() != '"') die(line_no);
-
-				vec_str.push_back(string);
-				num_str++;
-				outs << "\tLDR R0,=string_" << num_str << endl << "\tBL print_string" << endl;
-
-			}
-
-		}
 		else if (command == "END") {
 			outs << "\tBAL quit" << endl;
 		}
@@ -182,7 +167,7 @@ int main(int argc, char **argv) {
 			ss >> v;
 			if (!ss) die(line_no);
 			v = read_reg(v);
-			outs << "\tMOV R0, " << v << endl << "\tBL read_number" << endl; 
+			outs << "\tBL read_number\n\tMOV " << v << ", R0\n";
 		}
 		else die(line_no);
 
@@ -193,25 +178,20 @@ int main(int argc, char **argv) {
 	}
 
 	//Clean up the file at the bottom
-	outs << "\nquit:\n\tMOV R0, #42\n\tPOP {R4-R12}\n\tPOP {PC}\n"; //Finish the code and return
+	outs << "\nquit:\n\tMOV R0, #0\n\tPOP {R4-R12}\n\tPOP {PC}\n"; //Finish the code and return
 
 	if (vec_str.size() > 0) {
 		outs << ".data" << endl;
-		for (int i = 0; i < vec_str.size(); i++) {
+		for (size_t i = 0; i < vec_str.size(); i++) {
 			outs << "string_" << i+1 << ": .asciz " << vec_str.at(i) << endl;
 		}
 	}
 
-	outs.close(); //Close the file
 
-	if (assemble_only) return 0; //When you're debugging you should run bb8 with a parameter
-
-	//print.o is made from the Makefile, so make sure you make your code
-	if (system("g++ main.s print.o")) { //Compile your assembler code and check for errors
-		cout << "Assembling failed, which means your compiler screwed up.\n";
-		return 1;
-	}
-	//We've got an a.out now, so let's run it!
-	cout << "Compilation successful. Executing program now." << endl;
-	execve("a.out",NULL,NULL);
+    outs << ".section .note.GNU-stack,\"\",%progbits\n";
+    if (!outs) {
+        cerr << "Failed to write assembly output\n";
+        return 1;
+    }
+    return 0;
 }

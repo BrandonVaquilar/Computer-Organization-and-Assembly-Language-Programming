@@ -1,4 +1,4 @@
-#include </public/read.h>
+#include "../include/input.hpp"
 using namespace std;
 
 //extern "C" is how you connect assembly functions and C++
@@ -9,7 +9,7 @@ extern "C" {
 	int quz(int x, int y, int z, int w); //int quz(int x, int y, int z, int w) { return (x-y)*(z+w) - (x-y)*(-1*z + -1*w); }
 }
 
-int main() {
+int main() try {
 	const int x = read("Please input a value for x:\n");
 	const int y = read("Please input a value for y:\n");
 	const int z = read("Please input a value for z:\n");
@@ -19,4 +19,7 @@ int main() {
 	else if (choice == 2) cout << bar(x,y) << endl;
 	else if (choice == 3) cout << baz(x,y,z) << endl;
 	else if (choice == 4) cout << quz(x,y,z,w) << endl;
+} catch (const std::exception& error) {
+	cerr << error.what() << '\n';
+	return 1;
 }

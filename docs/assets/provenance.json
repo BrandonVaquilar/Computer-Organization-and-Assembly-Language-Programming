@@ -1,0 +1,48 @@
+{
+  "execution": "Actual ARM32 binaries, invoked with the configured runner",
+  "image_input": "asm_image/kyoto.jpg, bundled in the original coursework repository",
+  "processing": "Pillow decodes/encodes files, resizes previews and draws captions; ARM assembly transforms pixels and selects terrain paths",
+  "terrain_palette": "C++ preview driver maps original elevations to colors; cyan pixels are ARM -1 path markers",
+  "commands": [
+    {
+      "command": "qemu-arm -L /usr/arm-linux-gnueabihf build/image_filters darken build/previews/input.ppm build/previews/darken.ppm",
+      "stdout": "ARM32 darken: 960x540 -> build/previews/darken.ppm\n"
+    },
+    {
+      "command": "qemu-arm -L /usr/arm-linux-gnueabihf build/image_filters sepia build/previews/input.ppm build/previews/sepia.ppm",
+      "stdout": "ARM32 sepia: 960x540 -> build/previews/sepia.ppm\n"
+    },
+    {
+      "command": "qemu-arm -L /usr/arm-linux-gnueabihf build/image_filters warm build/previews/input.ppm build/previews/warm.ppm",
+      "stdout": "ARM32 warm: 960x540 -> build/previews/warm.ppm\n"
+    },
+    {
+      "command": "qemu-arm -L /usr/arm-linux-gnueabihf build/terrain bridges_mountains45/tahoe.dat 24 build/previews/tahoe.ppm",
+      "stdout": "ARM32 greedy terrain path: 63x48, start row 24, 63 marked columns\n"
+    },
+    {
+      "command": "qemu-arm -L /usr/arm-linux-gnueabihf build/terrain bridges_mountains45/san_joaquin.dat 184 build/previews/san_joaquin.ppm",
+      "stdout": "ARM32 greedy terrain path: 316x368, start row 184, 316 marked columns\n"
+    },
+    {
+      "command": "build/bb8 build/previews/countdown.s",
+      "stdout": ""
+    },
+    {
+      "command": "arm-linux-gnueabihf-g++ -marm -Wl,-z,noexecstack build/previews/countdown.s build/print.o -o build/previews/countdown",
+      "stdout": ""
+    },
+    {
+      "command": "qemu-arm -L /usr/arm-linux-gnueabihf build/previews/countdown",
+      "stdout": "Countdown from ARM32:\n5\n4\n3\n2\n1\nDone.\n"
+    },
+    {
+      "command": "qemu-arm -L /usr/arm-linux-gnueabihf build/fizzbuzz",
+      "stdout": "Calling your assembly fizzbuzz program...\n1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n16\n17\nFizz\n19\nBuzz\nFizz\n22\n23\nFizz\nBuzz\n26\nFizz\n28\n29\nFizzBuzz\n31\n32\nFizz\n34\nBuzz\nFizz\n37\n38\nFizz\nBuzz\n41\nFizz\n43\n44\nFizzBuzz\n46\n47\nFizz\n49\nBuzz\nFizz\n52\n53\nFizz\nBuzz\n56\nFizz\n58\n59\nFizzBuzz\n61\n62\nFizz\n64\nBuzz\nFizz\n67\n68\nFizz\nBuzz\n71\nFizz\n73\n74\nFizzBuzz\n76\n77\nFizz\n79\nBuzz\nFizz\n82\n83\nFizz\nBuzz\n86\nFizz\n88\n89\nFizzBuzz\n91\n92\nFizz\n94\nBuzz\nFizz\n97\n98\nFizz\nBuzz\nYour assembly fizzbuzz successfully returned control.\n"
+    },
+    {
+      "command": "qemu-arm -L /usr/arm-linux-gnueabihf build/spongebob",
+      "stdout": "Please enter a random seed:\nPlease enter a filename to spongebob:\nBefore: Building small things, one instruction at a time.\n\nARM32: buILdiNg SMaLL things, ONe INSTRuCtIOn at a tIMe.\n\nPASS: ARM32 matches the C++ reference for seed 42\n"
+    }
+  ]
+}

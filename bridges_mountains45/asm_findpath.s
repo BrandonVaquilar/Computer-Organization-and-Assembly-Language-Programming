@@ -1,79 +1,64 @@
+.syntax unified
+.arm
+.text
 .global asm_findpath
-.type	asm_findpath,%function
-//findPath(int *elev_data, int imgWidth, int imgHeight, int startRow, int maxVal)
-
-
+.type asm_findpath, %function
+@ void asm_findpath(int* grid, int width, int height, int start_row, int max_value)
+@ Mark a greedy west-to-east path with -1. Legacy max_value is unused.
+@ Elevations must be nonnegative int32 values. Ties: east, northeast, southeast.
 asm_findpath:
-	PUSH {LR}
-	PUSH {R4-R12}
-
-
-B check
-compare:
-CMP R2, R1			//compare topright and middle values
-BGT compare2		//if R1 is greater than, go to compare2
-CMP R2, R0			//compare topright and bottom right values
-BLT resume			//if R2 is the smallest, go back to resume
-
-compare2:
-CMP R1, R0			//compare middleright with bottom right
-BLT middle
-B bottom
-
-check:				
-	CMP R3, #0
-	BLT return
-	CMP R1, #0
-	BGE return
-	
-	MOV R10,#0		//column
-	//MOV R8, R4		//maxVal
-	MOV R7, R3		//startRow
-	MOV R6, R2		//imgHeight
-	MOV R5, R1 		//imgWidth
-	MOV R4, R0 		//elev_data
-	MUL R3, R7, R5  //pixel address
-
-	MOV R9, R5
-	SUB R9, #1
-top: 
-	//MOV R9, R5 		
-	//SUB R9, #1			//imgWidth - 1
-	CMP R10, R9		
-	BGE return			//if (Column >= (imgwidth - 1)) return
-
-	LDR R8, [R4, R3] 	//Current
-	MOV R8, #-1		 	//set current path to -1
-	STR R8,	[R4, R3]
-	
-Row0://check if it's at the top of the graph
-
-	
-inrow:
-	ADD R3, #4			//one right of pixel address
-	LDR R1, [R4, R3]	
-	LSL R11, R5, #2		//multiply imgWidth by 4
-	SUB R3, R3, R11		//subtract pixaddr with imgWidth
-	LDR R0, [R4, R3]
-	ADD R3, R3, R11		//add pixaddr with imgWidth
-	ADD R3, R3, R11		//do it again because we're at curr and we want the one under it
-	LDR R2, [R4, R3]
-	B compare
-
-middle:
-	SUB R3, R3, R11
-	B resume
-bottom:
-	SUB R3, R3, R11
-	SUB R3, R3, R11
-	B resume
-resume:
-//	STR R8, [R4, R3]
-endrow:
-
-	ADD R10, #1		//add 1 to column
-	B top
-
-return:
-	POP {R4-R12}
-	POP {PC}
+    push {r4-r11, lr}
+    cmp r0, #0
+    beq .Lreturn
+    cmp r1, #0
+    ble .Lreturn
+    cmp r2, #0
+    ble .Lreturn
+    cmp r3, #0
+    blt .Lreturn
+    cmp r3, r2
+    bge .Lreturn
+    mov r4, r0
+    mov r5, r1                  @ Width.
+    mov r6, r2                  @ Height.
+    mov r7, r3                  @ Current row.
+    mov r8, #0                  @ Current column.
+.Lcolumn:
+    mla r9, r7, r5, r8          @ Element index, not byte offset.
+    ldr r10, [r4, r9, lsl #2]   @ Read elevation before overwriting it.
+    mvn r0, #0
+    str r0, [r4, r9, lsl #2]
+    add r8, r8, #1
+    cmp r8, r5
+    bge .Lreturn               @ Mark the final column too.
+    add r9, r9, #1             @ Candidate east.
+    ldr r0, [r4, r9, lsl #2]
+    subs r11, r0, r10
+    rsbmi r11, r11, #0         @ Best absolute elevation change.
+    mov r12, r7
+    cmp r7, #0
+    beq .Lsoutheast
+    sub r1, r9, r5
+    ldr r0, [r4, r1, lsl #2]
+    subs r2, r0, r10
+    rsbmi r2, r2, #0
+    cmp r2, r11
+    movlt r11, r2
+    sublt r12, r7, #1
+.Lsoutheast:
+    add r1, r7, #1
+    cmp r1, r6
+    bge .Lchosen
+    add r2, r9, r5
+    ldr r0, [r4, r2, lsl #2]
+    subs r2, r0, r10
+    rsbmi r2, r2, #0
+    cmp r2, r11
+    movlt r12, r1
+.Lchosen:
+    mov r7, r12
+    b .Lcolumn
+.Lreturn:
+    pop {r4-r11, pc}
+.size asm_findpath, .-asm_findpath
+.section .note.GNU-stack,"",%progbits

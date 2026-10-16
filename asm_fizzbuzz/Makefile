@@ -1,11 +1,5 @@
-a.out: main.o fizzbuzz.o
-	gcc main.o fizzbuzz.o
-
-fizzbuzz.o: fizzbuzz.s
-	as -g -o fizzbuzz.o fizzbuzz.s
-
-main.o: main.c
-	gcc -g -c main.c
-
+.PHONY: all clean
+all:
+	$(MAKE) -C .. build/fizzbuzz
 clean:
-	rm -f a.out core *.o
+	$(MAKE) -C .. clean
